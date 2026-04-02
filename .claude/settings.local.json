@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(find '/c/Users/User/Desktop/AI project folder' -type f \\\\\\(-name *.html -o -name *.js -o -name *.jsx -o -name *.ts -o -name *.tsx -o -name *.py -o -name *.json -o -name *.yml -o -name *.yaml \\\\\\))",
+      "Bash(grep -r \"PORT\\\\|port\\\\|serve\\\\|dev\\\\|start\\\\|localhost\\\\|3000\\\\|8000\\\\|5000\" '/c/Users/User/Desktop/AI project folder' --include=*.json --include=*.js --include=*.py --include=*.ts --include=*.tsx)"
+    ]
+  }
+}
