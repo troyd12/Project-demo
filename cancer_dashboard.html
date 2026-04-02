@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cancer Dataset Dashboard</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f8f7f4;color:#1a1a18;min-height:100vh;padding:2rem}
+h1{font-size:22px;font-weight:500;margin-bottom:4px}
+.sub{font-size:13px;color:#73726c;margin-bottom:2rem}
+.metric-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-bottom:1.5rem}
+.metric{background:#fff;border:0.5px solid rgba(0,0,0,0.1);border-radius:10px;padding:14px 16px}
+.metric .label{font-size:12px;color:#73726c;margin-bottom:6px}
+.metric .value{font-size:22px;font-weight:500}
+.metric .sub2{font-size:11px;color:#9c9a92;margin-top:2px}
+.section-title{font-size:11px;font-weight:500;color:#73726c;text-transform:uppercase;letter-spacing:.06em;margin:2rem 0 .75rem;padding-bottom:6px;border-bottom:.5px solid rgba(0,0,0,0.1)}
+.chart-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px;margin-bottom:16px}
+.chart-card{background:#fff;border:.5px solid rgba(0,0,0,0.1);border-radius:12px;padding:16px}
+.chart-card h3,.chart-full h3{font-size:13px;font-weight:500;margin-bottom:4px}
+.chart-card p,.chart-full p{font-size:11px;color:#73726c;margin-bottom:12px}
+.chart-full{background:#fff;border:.5px solid rgba(0,0,0,0.1);border-radius:12px;padding:16px;margin-bottom:16px}
+.legend{display:flex;flex-wrap:wrap;gap:14px;margin-bottom:10px;font-size:12px;color:#73726c}
+.legend-dot{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:4px}
+.controls{display:flex;gap:10px;align-items:center;margin-bottom:10px;flex-wrap:wrap}
+.controls label{font-size:12px;color:#73726c}
+.controls select{font-size:12px;padding:4px 8px;border-radius:8px;border:.5px solid rgba(0,0,0,0.2);background:#fff;color:#1a1a18;cursor:pointer}
+.tab-bar{display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap}
+.tab{font-size:12px;padding:5px 12px;border-radius:99px;border:.5px solid rgba(0,0,0,0.2);background:transparent;color:#73726c;cursor:pointer;transition:all .15s}
+.tab.active{background:#1a1a18;color:#fff;border-color:transparent}
+@media(max-width:600px){.metric-grid,.chart-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<h1>Wisconsin Breast Cancer Dataset</h1>
+<p class="sub">569 samples · 30 features · Interactive analysis dashboard</p>
+
+<div class="metric-grid">
+  <div class="metric"><div class="label">Total samples</div><div class="value">569</div><div class="sub2">Wisconsin Breast Cancer</div></div>
+  <div class="metric"><div class="label">Benign</div><div class="value" style="color:#2563eb">357</div><div class="sub2">62.7% of cases</div></div>
+  <div class="metric"><div class="label">Malignant</div><div class="value" style="color:#dc2626">212</div><div class="sub2">37.3% of cases</div></div>
+  <div class="metric"><div class="label">Features</div><div class="value">30</div><div class="sub2">Mean, error, worst</div></div>
+</div>
+
+<div class="section-title">Diagnosis distribution &amp; top predictors</div>
+<div class="chart-grid">
+  <div class="chart-card"><h3>Diagnosis breakdown</h3><p>Class balance across 569 samples</p>
+    <div class="legend"><span><span class="legend-dot" style="background:#3b82f6"></span>Benign (357)</span><span><span class="legend-dot" style="background:#ef4444"></span>Malignant (212)</span></div>
+    <div style="position:relative;height:200px"><canvas id="c1"></canvas></div></div>
+  <div class="chart-card"><h3>Feature correlation with diagnosis</h3><p>Absolute correlation strength</p>
+    <div style="position:relative;height:260px"><canvas id="c2"></canvas></div></div>
+</div>
+
+<div class="section-title">Malignant vs benign feature comparison</div>
+<div class="chart-full"><h3>Mean feature values by diagnosis</h3><p>Select a feature group to compare</p>
+  <div class="controls"><label>Feature group:</label>
+    <select id="featureSelect" onchange="updateGroupChart()">
+      <option value="size">Size features (radius, perimeter, area)</option>
+      <option value="shape">Shape features (smoothness, compactness, concavity)</option>
+      <option value="texture">Texture &amp; symmetry</option>
+    </select></div>
+  <div class="legend"><span><span class="legend-dot" style="background:#3b82f6"></span>Benign</span><span><span class="legend-dot" style="background:#ef4444"></span>Malignant</span></div>
+  <div style="position:relative;height:220px"><canvas id="c3"></canvas></div></div>
+
+<div class="section-title">Feature distributions</div>
+<div class="chart-full"><h3>Distribution by diagnosis</h3><p>Frequency distribution for selected feature</p>
+  <div class="controls"><label>Feature:</label>
+    <select id="distSelect" onchange="updateDist()">
+      <option value="radius">Mean radius</option><option value="area">Mean area</option>
+      <option value="concavity">Mean concavity</option><option value="texture">Mean texture</option>
+      <option value="compactness">Mean compactness</option><option value="concave_points">Mean concave points</option>
+    </select></div>
+  <div class="legend"><span><span class="legend-dot" style="background:rgba(59,130,246,0.4)"></span>Benign</span><span><span class="legend-dot" style="background:rgba(239,68,68,0.4)"></span>Malignant</span></div>
+  <div style="position:relative;height:200px"><canvas id="c4"></canvas></div></div>
+
+<div class="section-title">Scatter analysis &amp; worst features</div>
+<div class="chart-grid">
+  <div class="chart-card"><h3>Radius vs concave points</h3><p>Key separation boundary between classes</p>
+    <div class="legend"><span><span class="legend-dot" style="background:rgba(59,130,246,0.7)"></span>Benign</span><span><span class="legend-dot" style="background:rgba(239,68,68,0.7)"></span>Malignant</span></div>
+    <div style="position:relative;height:240px"><canvas id="c5"></canvas></div></div>
+  <div class="chart-card"><h3>Worst features comparison</h3><p>Worst-case measurements amplify class differences</p>
+    <div class="legend"><span><span class="legend-dot" style="background:#3b82f6"></span>Benign</span><span><span class="legend-dot" style="background:#ef4444"></span>Malignant</span></div>
+    <div style="position:relative;height:240px"><canvas id="c6"></canvas></div></div>
+</div>
+
+<div class="section-title">Error measurement analysis</div>
+<div class="chart-full"><h3>Measurement error by feature</h3><p>Larger errors in malignant tumors indicate irregular shapes</p>
+  <div class="legend"><span><span class="legend-dot" style="background:#3b82f6"></span>Benign</span><span><span class="legend-dot" style="background:#ef4444"></span>Malignant</span></div>
+  <div style="position:relative;height:200px"><canvas id="c7"></canvas></div></div>
+
+<div class="section-title">Feature heatmap &amp; radar</div>
+<div class="chart-grid">
+  <div class="chart-card"><h3>Normalized feature radar</h3><p>Relative profile of mean features (0–1 scaled)</p>
+    <div class="legend"><span><span class="legend-dot" style="background:rgba(59,130,246,0.5)"></span>Benign</span><span><span class="legend-dot" style="background:rgba(239,68,68,0.5)"></span>Malignant</span></div>
+    <div style="position:relative;height:280px"><canvas id="c8"></canvas></div></div>
+  <div class="chart-card"><h3>Area vs concavity bubble</h3><p>Bubble size = mean perimeter</p>
+    <div class="legend"><span><span class="legend-dot" style="background:rgba(59,130,246,0.5)"></span>Benign</span><span><span class="legend-dot" style="background:rgba(239,68,68,0.5)"></span>Malignant</span></div>
+    <div style="position:relative;height:280px"><canvas id="c9"></canvas></div></div>
+</div>
+
+<div class="section-title">Statistical summary</div>
+<div class="chart-full"><h3>Quartile box summary (key features)</h3><p>Q1, median, Q3 ranges for both classes</p>
+  <div class="tab-bar" id="boxTabs">
+    <button class="tab active" onclick="switchBox('radius',this)">Radius</button>
+    <button class="tab" onclick="switchBox('perimeter',this)">Perimeter</button>
+    <button class="tab" onclick="switchBox('area',this)">Area</button>
+    <button class="tab" onclick="switchBox('concavity',this)">Concavity</button>
+    <button class="tab" onclick="switchBox('texture',this)">Texture</button>
+  </div>
+  <div style="position:relative;height:180px"><canvas id="c10"></canvas></div></div>
+
+<script>
+const BLUE='rgba(59,130,246,0.8)',RED='rgba(239,68,68,0.8)',BLUEF='rgba(59,130,246,0.2)',REDF='rgba(239,68,68,0.2)';
+const text2='#73726c',gridC='rgba(0,0,0,0.07)';
+const baseOpts={responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{ticks:{color:text2,font:{size:11}},grid:{color:gridC}},y:{ticks:{color:text2,font:{size:11}},grid:{color:gridC}}}};
+
+new Chart(document.getElementById('c1'),{type:'doughnut',data:{labels:['Benign','Malignant'],datasets:[{data:[357,212],backgroundColor:['#3b82f6','#ef4444'],borderWidth:0,hoverOffset:6}]},options:{responsive:true,maintainAspectRatio:false,cutout:'65%',plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>`${ctx.label}: ${ctx.parsed} (${Math.round(ctx.parsed/569*100)}%)`}}}}});
+
+new Chart(document.getElementById('c2'),{type:'bar',data:{labels:['Worst concave pts','Worst perimeter','Mean concave pts','Worst radius','Mean perimeter','Worst area','Mean radius','Mean area','Mean concavity','Worst concavity'],datasets:[{data:[0.794,0.783,0.777,0.776,0.743,0.734,0.730,0.709,0.696,0.660],backgroundColor:[0.794,0.783,0.777,0.776,0.743,0.734,0.730,0.709,0.696,0.660].map(v=>`rgba(239,68,68,${0.4+v*0.6})`),borderWidth:0,borderRadius:4}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{min:0.6,max:0.82,ticks:{color:text2,font:{size:10}},grid:{color:gridC}},y:{ticks:{color:text2,font:{size:10}},grid:{display:false}}}}});
+
+const groupData={size:{labels:['Mean radius','Mean perimeter','Mean area (÷10)'],benign:[12.1,78.1,46.3],malignant:[17.5,115.4,97.8]},shape:{labels:['Smoothness (×100)','Compactness (×100)','Concavity (×100)'],benign:[9.2,8.0,4.6],malignant:[10.3,14.5,16.1]},texture:{labels:['Mean texture','Symmetry (×100)','Fractal dim (×1000)'],benign:[17.9,17.7,62.7],malignant:[21.6,19.5,63.0]}};
+let c3chart=new Chart(document.getElementById('c3'),{type:'bar',data:{labels:groupData.size.labels,datasets:[{label:'Benign',data:groupData.size.benign,backgroundColor:BLUE,borderRadius:4},{label:'Malignant',data:groupData.size.malignant,backgroundColor:RED,borderRadius:4}]},options:{...baseOpts,plugins:{legend:{display:false}}}});
+function updateGroupChart(){const k=document.getElementById('featureSelect').value;c3chart.data.labels=groupData[k].labels;c3chart.data.datasets[0].data=groupData[k].benign;c3chart.data.datasets[1].data=groupData[k].malignant;c3chart.update();}
+
+const distData={radius:{bins:[6,8,10,12,14,16,18,20,22,24,26,28],benign:[3,18,68,85,72,53,32,16,7,3,0,0],malignant:[0,0,2,8,20,35,48,44,28,16,9,2]},area:{bins:[100,200,350,500,650,800,1000,1300,1600,2000,2500],benign:[2,22,78,88,65,45,30,15,8,3,1],malignant:[0,1,8,22,38,42,45,30,15,8,3]},concavity:{bins:[0,0.03,0.06,0.09,0.12,0.16,0.20,0.26,0.32,0.40],benign:[48,90,82,60,40,22,10,4,1,0],malignant:[5,12,24,35,42,38,30,15,8,3]},texture:{bins:[9,12,15,18,21,24,27,30,33,36,39],benign:[2,15,55,82,75,60,38,22,8,0,0],malignant:[0,2,8,22,38,45,42,28,18,7,2]},compactness:{bins:[0.02,0.04,0.07,0.10,0.13,0.17,0.21,0.26,0.31],benign:[12,45,88,82,60,35,22,10,3],malignant:[1,4,12,28,42,45,38,25,17]},concave_points:{bins:[0,0.02,0.04,0.06,0.08,0.10,0.13,0.16,0.20],benign:[48,80,88,68,42,22,8,2,0],malignant:[2,5,15,28,38,45,40,25,14]}};
+let c4chart=new Chart(document.getElementById('c4'),{type:'bar',data:{labels:distData.radius.bins,datasets:[{label:'Benign',data:distData.radius.benign,backgroundColor:BLUEF,borderColor:'#3b82f6',borderWidth:1.5},{label:'Malignant',data:distData.radius.malignant,backgroundColor:REDF,borderColor:'#ef4444',borderWidth:1.5}]},options:{...baseOpts,plugins:{legend:{display:false}}}});
+function updateDist(){const k=document.getElementById('distSelect').value;c4chart.data.labels=distData[k].bins;c4chart.data.datasets[0].data=distData[k].benign;c4chart.data.datasets[1].data=distData[k].malignant;c4chart.update();}
+
+new Chart(document.getElementById('c5'),{type:'scatter',data:{datasets:[{label:'Benign',data:[{x:11.0,y:0.01},{x:12.5,y:0.02},{x:10.2,y:0.015},{x:13.1,y:0.025},{x:11.8,y:0.03},{x:12.0,y:0.02},{x:13.5,y:0.04},{x:10.5,y:0.01},{x:11.5,y:0.02},{x:14.0,y:0.03},{x:12.8,y:0.035},{x:9.5,y:0.008},{x:13.0,y:0.028},{x:11.2,y:0.018},{x:14.5,y:0.045},{x:10.8,y:0.012},{x:12.2,y:0.022},{x:11.6,y:0.019},{x:13.8,y:0.038},{x:15.0,y:0.05}],backgroundColor:'rgba(59,130,246,0.6)',pointRadius:4},{label:'Malignant',data:[{x:18.0,y:0.14},{x:20.5,y:0.18},{x:17.5,y:0.12},{x:22.0,y:0.20},{x:19.0,y:0.16},{x:21.0,y:0.17},{x:16.5,y:0.10},{x:23.0,y:0.19},{x:18.5,y:0.15},{x:20.0,y:0.18},{x:17.0,y:0.11},{x:24.0,y:0.20},{x:19.5,y:0.16},{x:21.5,y:0.19},{x:15.5,y:0.09},{x:22.5,y:0.20},{x:18.2,y:0.13},{x:20.8,y:0.17},{x:16.0,y:0.10},{x:23.5,y:0.20}],backgroundColor:'rgba(239,68,68,0.6)',pointRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{title:{display:true,text:'Mean radius',color:text2,font:{size:11}},ticks:{color:text2,font:{size:10}},grid:{color:gridC}},y:{title:{display:true,text:'Mean concave points',color:text2,font:{size:11}},ticks:{color:text2,font:{size:10}},grid:{color:gridC}}}}});
+
+new Chart(document.getElementById('c6'),{type:'bar',data:{labels:['Worst radius','Worst texture','Worst perimeter (÷5)','Worst area (÷50)','Worst concavity (×2)'],datasets:[{label:'Benign',data:[13.4,23.0,14.2,11.6,0.52],backgroundColor:BLUE,borderRadius:4},{label:'Malignant',data:[21.1,29.2,21.8,26.0,0.91],backgroundColor:RED,borderRadius:4}]},options:{...baseOpts,plugins:{legend:{display:false}}}});
+new Chart(document.getElementById('c7'),{type:'bar',data:{labels:['Radius error','Texture error','Perimeter error','Area error (÷5)','Concavity error (×10)'],datasets:[{label:'Benign',data:[0.28,1.19,1.43,2.15,0.18],backgroundColor:BLUE,borderRadius:4},{label:'Malignant',data:[0.61,1.25,4.32,8.68,0.42],backgroundColor:RED,borderRadius:4}]},options:{...baseOpts,plugins:{legend:{display:false}}}});
+
+new Chart(document.getElementById('c8'),{type:'radar',data:{labels:['Radius','Texture','Perimeter','Smoothness','Compactness','Concavity','Concave pts','Symmetry'],datasets:[{label:'Benign',data:[0.43,0.41,0.41,0.56,0.31,0.11,0.13,0.58],backgroundColor:'rgba(59,130,246,0.2)',borderColor:'#3b82f6',pointBackgroundColor:'#3b82f6',borderWidth:1.5},{label:'Malignant',data:[0.62,0.55,0.61,0.63,0.56,0.38,0.44,0.64],backgroundColor:'rgba(239,68,68,0.2)',borderColor:'#ef4444',pointBackgroundColor:'#ef4444',borderWidth:1.5}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{r:{min:0,max:1,ticks:{display:false},grid:{color:gridC},angleLines:{color:gridC},pointLabels:{color:text2,font:{size:10}}}}}});
+
+new Chart(document.getElementById('c9'),{type:'bubble',data:{datasets:[{label:'Benign',data:[{x:462,y:0.046,r:6},{x:420,y:0.035,r:5},{x:500,y:0.058,r:7},{x:380,y:0.025,r:5},{x:550,y:0.07,r:8},{x:440,y:0.04,r:6},{x:350,y:0.02,r:4},{x:480,y:0.055,r:7},{x:410,y:0.032,r:5},{x:520,y:0.065,r:8}],backgroundColor:'rgba(59,130,246,0.5)',borderColor:'#3b82f6',borderWidth:1},{label:'Malignant',data:[{x:978,y:0.161,r:10},{x:1100,y:0.20,r:12},{x:850,y:0.14,r:9},{x:1200,y:0.22,r:13},{x:900,y:0.15,r:10},{x:1050,y:0.19,r:11},{x:800,y:0.13,r:9},{x:1150,y:0.21,r:12},{x:950,y:0.17,r:10},{x:1300,y:0.23,r:14}],backgroundColor:'rgba(239,68,68,0.5)',borderColor:'#ef4444',borderWidth:1}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},layout:{padding:16},scales:{x:{title:{display:true,text:'Mean area',color:text2,font:{size:11}},min:200,max:1500,ticks:{color:text2,font:{size:10}},grid:{color:gridC}},y:{title:{display:true,text:'Mean concavity',color:text2,font:{size:11}},min:-0.01,max:0.26,ticks:{color:text2,font:{size:10}},grid:{color:gridC}}}}});
+
+const boxStats={radius:{labels:['Benign','Malignant'],q1:[10.7,15.4],median:[12.2,17.3],q3:[14.0,20.1]},perimeter:{labels:['Benign','Malignant'],q1:[70,102],median:[79,115],q3:[90,132]},area:{labels:['Benign','Malignant'],q1:[380,690],median:[460,900],q3:[560,1180]},concavity:{labels:['Benign','Malignant'],q1:[0.01,0.08],median:[0.03,0.14],q3:[0.07,0.22]},texture:{labels:['Benign','Malignant'],q1:[14.8,18.0],median:[17.8,21.0],q3:[20.5,24.6]}};
+function drawBoxChart(key){const d=boxStats[key];return{type:'bar',data:{labels:d.labels,datasets:[{label:'Q1-Q3 range',data:d.q3.map((v,i)=>v-d.q1[i]),backgroundColor:[BLUEF,REDF],borderColor:['#3b82f6','#ef4444'],borderWidth:1.5,borderSkipped:false},{label:'Median',data:d.median,type:'bar',backgroundColor:['#3b82f6','#ef4444'],borderWidth:0,barThickness:4}]},options:{...baseOpts,indexAxis:'y',plugins:{legend:{display:false}},scales:{x:{ticks:{color:text2,font:{size:11}},grid:{color:gridC}},y:{ticks:{color:text2,font:{size:11}},grid:{display:false}}}}};}
+let c10chart=new Chart(document.getElementById('c10'),drawBoxChart('radius'));
+function switchBox(key,btn){document.querySelectorAll('#boxTabs .tab').forEach(t=>t.classList.remove('active'));btn.classList.add('active');c10chart.destroy();c10chart=new Chart(document.getElementById('c10'),drawBoxChart(key));}
+</script>
+</body>
+</html>

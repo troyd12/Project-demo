@@ -1,0 +1,37 @@
+# OS files
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+venv/
+.venv/
+env/
+
+# Node
+node_modules/
+package-lock.json
+
+# Environment / Secrets
+.env
+.env.local
+*.key
+*.pem
+
+# Output files (regenerated)
+*.log
+npm-debug.log*
+
+# Jupyter
+.ipynb_checkpoints/

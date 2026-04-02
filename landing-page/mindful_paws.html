@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mindful Paws | Where Grooming Meets Calm</title>
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --sage: #7a9e7e;
+      --sage-dark: #5c7e60;
+      --cream: #faf6f0;
+      --warm: #e8d5c4;
+      --charcoal: #2c2c2c;
+      --soft-white: #ffffff;
+      --lavender: #c4b1d4;
+      --peach: #f0c9a6;
+      --radius: 16px;
+      --shadow: 0 4px 24px rgba(0,0,0,0.08);
+      --transition: 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: var(--cream);
+      color: var(--charcoal);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      background: rgba(250, 246, 240, 0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(122, 158, 126, 0.15);
+      transition: box-shadow var(--transition);
+    }
+    nav.scrolled { box-shadow: 0 2px 20px rgba(0,0,0,0.06); }
+    .nav-inner {
+      max-width: 1200px; margin: 0 auto;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 16px 24px;
+    }
+    .logo {
+      font-size: 1.5rem; font-weight: 700; color: var(--sage-dark);
+      display: flex; align-items: center; gap: 8px; text-decoration: none;
+    }
+    .logo-icon { font-size: 1.8rem; }
+    .nav-links { display: flex; gap: 32px; list-style: none; }
+    .nav-links a {
+      text-decoration: none; color: var(--charcoal); font-weight: 500;
+      position: relative; transition: color 0.3s;
+    }
+    .nav-links a::after {
+      content: ''; position: absolute; bottom: -4px; left: 0;
+      width: 0; height: 2px; background: var(--sage);
+      transition: width 0.3s;
+    }
+    .nav-links a:hover { color: var(--sage-dark); }
+    .nav-links a:hover::after { width: 100%; }
+
+    .mobile-toggle {
+      display: none; background: none; border: none;
+      font-size: 1.5rem; cursor: pointer; color: var(--charcoal);
+    }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh; display: flex; align-items: center; justify-content: center;
+      text-align: center; padding: 120px 24px 80px;
+      background: linear-gradient(170deg, var(--cream) 0%, #e8efe9 40%, var(--warm) 100%);
+      position: relative; overflow: hidden;
+    }
+    .hero::before {
+      content: ''; position: absolute; top: -50%; right: -20%;
+      width: 600px; height: 600px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(122,158,126,0.12) 0%, transparent 70%);
+    }
+    .hero::after {
+      content: ''; position: absolute; bottom: -30%; left: -10%;
+      width: 500px; height: 500px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(196,177,212,0.12) 0%, transparent 70%);
+    }
+    .hero-content { position: relative; z-index: 1; max-width: 700px; }
+    .hero-badge {
+      display: inline-block; padding: 8px 20px; border-radius: 50px;
+      background: rgba(122,158,126,0.15); color: var(--sage-dark);
+      font-size: 0.85rem; font-weight: 600; letter-spacing: 1px;
+      text-transform: uppercase; margin-bottom: 24px;
+    }
+    .hero h1 {
+      font-size: clamp(2.5rem, 6vw, 4.2rem); font-weight: 800;
+      line-height: 1.1; margin-bottom: 16px;
+      background: linear-gradient(135deg, var(--charcoal) 0%, var(--sage-dark) 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .hero .tagline {
+      font-size: clamp(1.1rem, 2.5vw, 1.4rem); color: #666;
+      margin-bottom: 40px; font-style: italic;
+    }
+    .hero-buttons { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+    .btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 14px 32px; border-radius: 50px; font-size: 1rem;
+      font-weight: 600; text-decoration: none; cursor: pointer;
+      border: none; transition: all 0.3s;
+    }
+    .btn-primary {
+      background: var(--sage); color: white;
+      box-shadow: 0 4px 16px rgba(122,158,126,0.35);
+    }
+    .btn-primary:hover {
+      background: var(--sage-dark); transform: translateY(-2px);
+      box-shadow: 0 6px 24px rgba(122,158,126,0.45);
+    }
+    .btn-secondary {
+      background: var(--soft-white); color: var(--charcoal);
+      border: 2px solid rgba(122,158,126,0.3);
+    }
+    .btn-secondary:hover {
+      border-color: var(--sage); background: rgba(122,158,126,0.05);
+      transform: translateY(-2px);
+    }
+
+    /* ── SECTIONS ── */
+    section { padding: 100px 24px; }
+    .section-header { text-align: center; margin-bottom: 60px; }
+    .section-header h2 {
+      font-size: clamp(1.8rem, 4vw, 2.6rem); font-weight: 700; margin-bottom: 12px;
+    }
+    .section-header p { color: #777; font-size: 1.1rem; max-width: 550px; margin: 0 auto; }
+    .container { max-width: 1200px; margin: 0 auto; }
+
+    /* ── QUIZ ── */
+    #quiz { background: linear-gradient(180deg, var(--cream) 0%, #e8efe9 100%); }
+    .quiz-card {
+      max-width: 600px; margin: 0 auto; background: var(--soft-white);
+      border-radius: var(--radius); box-shadow: var(--shadow);
+      padding: 48px; position: relative; overflow: hidden;
+    }
+    .quiz-progress {
+      display: flex; gap: 8px; margin-bottom: 32px; justify-content: center;
+    }
+    .quiz-dot {
+      width: 40px; height: 6px; border-radius: 3px;
+      background: #e0e0e0; transition: background 0.4s;
+    }
+    .quiz-dot.active { background: var(--sage); }
+    .quiz-dot.done { background: var(--sage-dark); }
+    .quiz-step {
+      display: none; animation: fadeSlideIn 0.5s ease forwards;
+      text-align: center;
+    }
+    .quiz-step.active { display: block; }
+    @keyframes fadeSlideIn {
+      from { opacity: 0; transform: translateY(16px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .quiz-step h3 { font-size: 1.4rem; margin-bottom: 8px; }
+    .quiz-step p { color: #888; margin-bottom: 28px; }
+    .quiz-options { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .quiz-option {
+      padding: 16px; border: 2px solid #e8e8e8; border-radius: 12px;
+      background: var(--soft-white); cursor: pointer;
+      transition: all 0.3s; text-align: center; font-weight: 500;
+    }
+    .quiz-option:hover { border-color: var(--sage); background: rgba(122,158,126,0.04); }
+    .quiz-option.selected { border-color: var(--sage); background: rgba(122,158,126,0.1); }
+    .quiz-option .option-icon { font-size: 1.8rem; display: block; margin-bottom: 6px; }
+    .quiz-result {
+      display: none; text-align: center;
+      animation: fadeSlideIn 0.5s ease forwards;
+    }
+    .quiz-result.active { display: block; }
+    .quiz-result .price-tag {
+      font-size: 3rem; font-weight: 800; color: var(--sage-dark); margin: 16px 0 8px;
+    }
+    .quiz-result .price-desc { color: #888; margin-bottom: 28px; }
+    .quiz-nav { display: flex; justify-content: center; gap: 12px; margin-top: 24px; }
+    .quiz-nav button {
+      padding: 10px 28px; border-radius: 50px; font-weight: 600;
+      cursor: pointer; transition: all 0.3s; font-size: 0.95rem;
+    }
+    .quiz-back {
+      background: none; border: 2px solid #ddd; color: #888;
+    }
+    .quiz-back:hover { border-color: var(--sage); color: var(--sage-dark); }
+    .quiz-restart {
+      background: var(--sage); color: white; border: none;
+      box-shadow: 0 2px 12px rgba(122,158,126,0.3);
+    }
+    .quiz-restart:hover { background: var(--sage-dark); }
+
+    /* ── SERVICES ── */
+    #services { background: var(--soft-white); }
+    .services-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 24px;
+    }
+    .service-card {
+      background: var(--cream); border-radius: var(--radius); padding: 36px 28px;
+      transition: all 0.4s; position: relative; overflow: hidden;
+    }
+    .service-card::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0;
+      height: 4px; background: var(--sage); transform: scaleX(0);
+      transform-origin: left; transition: transform 0.4s;
+    }
+    .service-card:hover { transform: translateY(-6px); box-shadow: var(--shadow); }
+    .service-card:hover::before { transform: scaleX(1); }
+    .service-icon { font-size: 2.5rem; margin-bottom: 16px; }
+    .service-card h3 { font-size: 1.25rem; margin-bottom: 8px; }
+    .service-card .desc { color: #777; font-size: 0.95rem; margin-bottom: 20px; }
+    .service-price {
+      font-size: 1.6rem; font-weight: 700; color: var(--sage-dark);
+    }
+    .service-price span { font-size: 0.9rem; font-weight: 400; color: #aaa; }
+
+    /* ── GALLERY ── */
+    #gallery { background: var(--cream); }
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 20px;
+    }
+    .gallery-item {
+      aspect-ratio: 4/3; border-radius: var(--radius); overflow: hidden;
+      position: relative; cursor: pointer;
+      background: linear-gradient(135deg, #d4e4d6 0%, #e8d5c4 50%, #c4b1d4 100%);
+      transition: transform 0.4s;
+    }
+    .gallery-item:hover { transform: scale(1.03); }
+    .gallery-placeholder {
+      width: 100%; height: 100%; display: flex; flex-direction: column;
+      align-items: center; justify-content: center; color: rgba(255,255,255,0.85);
+    }
+    .gallery-placeholder .ph-icon { font-size: 3rem; margin-bottom: 8px; }
+    .gallery-placeholder .ph-text { font-weight: 600; font-size: 0.95rem; }
+    .gallery-item:nth-child(2) { background: linear-gradient(135deg, #c4b1d4 0%, #e8d5c4 100%); }
+    .gallery-item:nth-child(3) { background: linear-gradient(135deg, #f0c9a6 0%, #d4e4d6 100%); }
+    .gallery-item:nth-child(4) { background: linear-gradient(135deg, #e8d5c4 0%, #c4b1d4 50%, #d4e4d6 100%); }
+    .gallery-item:nth-child(5) { background: linear-gradient(135deg, #d4e4d6 0%, #f0c9a6 100%); }
+    .gallery-item:nth-child(6) { background: linear-gradient(135deg, #c4b1d4 0%, #f0c9a6 50%, #d4e4d6 100%); }
+
+    /* ── BOOKING FORM ── */
+    #booking {
+      background: linear-gradient(180deg, var(--soft-white) 0%, var(--cream) 100%);
+    }
+    .booking-card {
+      max-width: 600px; margin: 0 auto; background: var(--soft-white);
+      border-radius: var(--radius); box-shadow: var(--shadow); padding: 48px;
+    }
+    .form-group { margin-bottom: 24px; }
+    .form-group label {
+      display: block; font-weight: 600; margin-bottom: 8px;
+      font-size: 0.95rem; color: var(--charcoal);
+    }
+    .form-group input, .form-group select {
+      width: 100%; padding: 14px 18px; border: 2px solid #e8e8e8;
+      border-radius: 12px; font-size: 1rem; font-family: inherit;
+      transition: border-color 0.3s, box-shadow 0.3s;
+      background: var(--cream);
+    }
+    .form-group input:focus, .form-group select:focus {
+      outline: none; border-color: var(--sage);
+      box-shadow: 0 0 0 4px rgba(122,158,126,0.12);
+    }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .form-submit {
+      width: 100%; padding: 16px; border: none; border-radius: 50px;
+      background: var(--sage); color: white; font-size: 1.1rem;
+      font-weight: 700; cursor: pointer; transition: all 0.3s;
+      box-shadow: 0 4px 16px rgba(122,158,126,0.35);
+    }
+    .form-submit:hover {
+      background: var(--sage-dark); transform: translateY(-2px);
+      box-shadow: 0 6px 24px rgba(122,158,126,0.45);
+    }
+    .form-success {
+      display: none; text-align: center; padding: 40px 20px;
+      animation: fadeSlideIn 0.5s ease;
+    }
+    .form-success .check-circle {
+      width: 80px; height: 80px; border-radius: 50%;
+      background: rgba(122,158,126,0.12); display: flex;
+      align-items: center; justify-content: center;
+      font-size: 2.5rem; margin: 0 auto 20px;
+    }
+    .form-success h3 { font-size: 1.5rem; margin-bottom: 8px; }
+    .form-success p { color: #888; }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--charcoal); color: rgba(255,255,255,0.7);
+      padding: 60px 24px 30px; text-align: center;
+    }
+    .footer-brand {
+      font-size: 1.5rem; font-weight: 700; color: var(--sage);
+      margin-bottom: 8px;
+    }
+    .footer-tagline { font-style: italic; margin-bottom: 24px; }
+    .footer-links { display: flex; gap: 24px; justify-content: center; margin-bottom: 32px; flex-wrap: wrap; }
+    .footer-links a { color: rgba(255,255,255,0.6); text-decoration: none; transition: color 0.3s; }
+    .footer-links a:hover { color: var(--sage); }
+    .footer-copy { font-size: 0.85rem; color: rgba(255,255,255,0.4); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .mobile-toggle { display: block; }
+      .nav-links.open {
+        display: flex; flex-direction: column;
+        position: absolute; top: 100%; left: 0; right: 0;
+        background: var(--cream); padding: 20px 24px;
+        border-bottom: 1px solid rgba(122,158,126,0.15);
+        gap: 16px;
+      }
+      .form-row { grid-template-columns: 1fr; }
+      .quiz-options { grid-template-columns: 1fr; }
+      .quiz-card, .booking-card { padding: 32px 20px; }
+    }
+
+    /* ── FADE-IN ON SCROLL ── */
+    .reveal {
+      opacity: 0; transform: translateY(30px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="navbar">
+  <div class="nav-inner">
+    <a href="#" class="logo"><span class="logo-icon">🐾</span> Mindful Paws</a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#quiz">Price Quiz</a></li>
+      <li><a href="#services">Services</a></li>
+      <li><a href="#gallery">Gallery</a></li>
+      <li><a href="#booking">Book Now</a></li>
+    </ul>
+    <button class="mobile-toggle" id="mobileToggle" aria-label="Menu">&#9776;</button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="hero">
+  <div class="hero-content">
+    <div class="hero-badge">Boutique Pet Grooming</div>
+    <h1>Mindful Paws</h1>
+    <p class="tagline">Where grooming meets calm</p>
+    <div class="hero-buttons">
+      <a href="#booking" class="btn btn-primary">Book Appointment</a>
+      <a href="#quiz" class="btn btn-secondary">Get a Price Estimate</a>
+    </div>
+  </div>
+</section>
+
+<!-- QUIZ -->
+<section id="quiz">
+  <div class="container">
+    <div class="section-header reveal">
+      <h2>Quick Price Estimate</h2>
+      <p>Answer 3 quick questions and we'll give you an instant quote</p>
+    </div>
+    <div class="quiz-card reveal">
+      <div class="quiz-progress">
+        <div class="quiz-dot active" id="dot1"></div>
+        <div class="quiz-dot" id="dot2"></div>
+        <div class="quiz-dot" id="dot3"></div>
+      </div>
+
+      <!-- Step 1 -->
+      <div class="quiz-step active" id="step1">
+        <h3>What type of pet?</h3>
+        <p>Select your furry friend's species</p>
+        <div class="quiz-options">
+          <div class="quiz-option" data-value="dog" onclick="quizSelect(1, this)">
+            <span class="option-icon">🐕</span> Dog
+          </div>
+          <div class="quiz-option" data-value="cat" onclick="quizSelect(1, this)">
+            <span class="option-icon">🐈</span> Cat
+          </div>
+          <div class="quiz-option" data-value="rabbit" onclick="quizSelect(1, this)">
+            <span class="option-icon">🐇</span> Rabbit
+          </div>
+          <div class="quiz-option" data-value="other" onclick="quizSelect(1, this)">
+            <span class="option-icon">🐾</span> Other
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 2 -->
+      <div class="quiz-step" id="step2">
+        <h3>What size is your pet?</h3>
+        <p>This helps us estimate grooming time</p>
+        <div class="quiz-options">
+          <div class="quiz-option" data-value="small" onclick="quizSelect(2, this)">
+            <span class="option-icon">🤏</span> Small<br><small style="color:#aaa">Under 20 lbs</small>
+          </div>
+          <div class="quiz-option" data-value="medium" onclick="quizSelect(2, this)">
+            <span class="option-icon">🐕</span> Medium<br><small style="color:#aaa">20–50 lbs</small>
+          </div>
+          <div class="quiz-option" data-value="large" onclick="quizSelect(2, this)">
+            <span class="option-icon">🦮</span> Large<br><small style="color:#aaa">50–80 lbs</small>
+          </div>
+          <div class="quiz-option" data-value="xlarge" onclick="quizSelect(2, this)">
+            <span class="option-icon">🐻</span> X-Large<br><small style="color:#aaa">80+ lbs</small>
+          </div>
+        </div>
+        <div class="quiz-nav">
+          <button class="quiz-back" onclick="quizBack(1)">Back</button>
+        </div>
+      </div>
+
+      <!-- Step 3 -->
+      <div class="quiz-step" id="step3">
+        <h3>Which service?</h3>
+        <p>Pick the pampering level</p>
+        <div class="quiz-options">
+          <div class="quiz-option" data-value="bath" onclick="quizSelect(3, this)">
+            <span class="option-icon">🛁</span> Bath &amp; Brush
+          </div>
+          <div class="quiz-option" data-value="groom" onclick="quizSelect(3, this)">
+            <span class="option-icon">✂️</span> Full Groom
+          </div>
+          <div class="quiz-option" data-value="spa" onclick="quizSelect(3, this)">
+            <span class="option-icon">💆</span> Spa Day
+          </div>
+          <div class="quiz-option" data-value="puppy" onclick="quizSelect(3, this)">
+            <span class="option-icon">🐶</span> Puppy First Groom
+          </div>
+        </div>
+        <div class="quiz-nav">
+          <button class="quiz-back" onclick="quizBack(2)">Back</button>
+        </div>
+      </div>
+
+      <!-- Result -->
+      <div class="quiz-result" id="quizResult">
+        <h3>Your Estimate</h3>
+        <div class="price-tag" id="quizPrice">$75</div>
+        <p class="price-desc" id="quizDesc">Full Groom for a medium dog</p>
+        <p style="color:#aaa; font-size:0.85rem;">Final pricing confirmed at appointment</p>
+        <div class="quiz-nav">
+          <button class="quiz-restart" onclick="quizReset()">Start Over</button>
+          <a href="#booking" class="btn btn-primary" style="font-size:0.95rem; padding:10px 24px;">Book Now</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section id="services">
+  <div class="container">
+    <div class="section-header reveal">
+      <h2>Our Services</h2>
+      <p>Gentle care tailored to every pet's unique needs</p>
+    </div>
+    <div class="services-grid">
+      <div class="service-card reveal">
+        <div class="service-icon">🛁</div>
+        <h3>Bath &amp; Brush</h3>
+        <p class="desc">Warm bath with premium shampoo, blow-dry, brushing, ear cleaning, and nail trim.</p>
+        <div class="service-price">$45 <span>/ session</span></div>
+      </div>
+      <div class="service-card reveal">
+        <div class="service-icon">✂️</div>
+        <h3>Full Groom</h3>
+        <p class="desc">Everything in Bath &amp; Brush plus a full haircut styled to breed standard or your preference.</p>
+        <div class="service-price">$75 <span>/ session</span></div>
+      </div>
+      <div class="service-card reveal">
+        <div class="service-icon">💆</div>
+        <h3>Spa Day</h3>
+        <p class="desc">The ultimate pamper — deep conditioning, blueberry facial, paw balm, and aromatherapy.</p>
+        <div class="service-price">$120 <span>/ session</span></div>
+      </div>
+      <div class="service-card reveal">
+        <div class="service-icon">🐶</div>
+        <h3>Puppy First Groom</h3>
+        <p class="desc">A gentle introduction to grooming for puppies under 6 months. Positive, stress-free experience.</p>
+        <div class="service-price">$55 <span>/ session</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- GALLERY -->
+<section id="gallery">
+  <div class="container">
+    <div class="section-header reveal">
+      <h2>Happy Clients</h2>
+      <p>A glimpse of the transformations at Mindful Paws</p>
+    </div>
+    <div class="gallery-grid">
+      <div class="gallery-item reveal">
+        <div class="gallery-placeholder">
+          <span class="ph-icon">🐩</span>
+          <span class="ph-text">Freshly Groomed Poodle</span>
+        </div>
+      </div>
+      <div class="gallery-item reveal">
+        <div class="gallery-placeholder">
+          <span class="ph-icon">🐱</span>
+          <span class="ph-text">Relaxed Spa Kitty</span>
+        </div>
+      </div>
+      <div class="gallery-item reveal">
+        <div class="gallery-placeholder">
+          <span class="ph-icon">🐕</span>
+          <span class="ph-text">Golden After Bath</span>
+        </div>
+      </div>
+      <div class="gallery-item reveal">
+        <div class="gallery-placeholder">
+          <span class="ph-icon">🐶</span>
+          <span class="ph-text">Puppy's First Visit</span>
+        </div>
+      </div>
+      <div class="gallery-item reveal">
+        <div class="gallery-placeholder">
+          <span class="ph-icon">✨</span>
+          <span class="ph-text">Before &amp; After</span>
+        </div>
+      </div>
+      <div class="gallery-item reveal">
+        <div class="gallery-placeholder">
+          <span class="ph-icon">🐾</span>
+          <span class="ph-text">Happy Tails</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BOOKING -->
+<section id="booking">
+  <div class="container">
+    <div class="section-header reveal">
+      <h2>Book an Appointment</h2>
+      <p>Reserve a calm, personalized session for your pet</p>
+    </div>
+    <div class="booking-card reveal">
+      <form id="bookingForm">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="petName">Pet's Name</label>
+            <input type="text" id="petName" placeholder="e.g. Luna" required>
+          </div>
+          <div class="form-group">
+            <label for="ownerName">Your Name</label>
+            <input type="text" id="ownerName" placeholder="e.g. Sarah Johnson" required>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="phone">Phone Number</label>
+            <input type="tel" id="phone" placeholder="(555) 123-4567" required>
+          </div>
+          <div class="form-group">
+            <label for="prefDate">Preferred Date</label>
+            <input type="date" id="prefDate" required>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="serviceSelect">Service</label>
+          <select id="serviceSelect" required>
+            <option value="">Choose a service...</option>
+            <option value="bath">Bath &amp; Brush — $45</option>
+            <option value="groom">Full Groom — $75</option>
+            <option value="spa">Spa Day — $120</option>
+            <option value="puppy">Puppy First Groom — $55</option>
+          </select>
+        </div>
+        <button type="submit" class="form-submit">Request Appointment</button>
+      </form>
+      <div class="form-success" id="formSuccess">
+        <div class="check-circle">✓</div>
+        <h3>Request Received!</h3>
+        <p>We'll call you within 24 hours to confirm your appointment.</p>
+        <br>
+        <button class="btn btn-primary" onclick="resetForm()" style="font-size:0.95rem;">Book Another</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-brand">🐾 Mindful Paws</div>
+  <p class="footer-tagline">Where grooming meets calm</p>
+  <div class="footer-links">
+    <a href="#services">Services</a>
+    <a href="#gallery">Gallery</a>
+    <a href="#booking">Book Now</a>
+    <a href="#quiz">Price Quiz</a>
+  </div>
+  <p class="footer-copy">&copy; 2026 Mindful Paws. All rights reserved.</p>
+</footer>
+
+<script>
+  // ── NAV SCROLL ──
+  const nav = document.getElementById('navbar');
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 20);
+  });
+
+  // ── MOBILE MENU ──
+  const mobileToggle = document.getElementById('mobileToggle');
+  const navLinks = document.getElementById('navLinks');
+  mobileToggle.addEventListener('click', () => navLinks.classList.toggle('open'));
+  navLinks.querySelectorAll('a').forEach(a =>
+    a.addEventListener('click', () => navLinks.classList.remove('open'))
+  );
+
+  // ── SCROLL REVEAL ──
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.15 });
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+  // ── QUIZ ──
+  const quizData = { pet: '', size: '', service: '' };
+
+  const basePrices = { bath: 45, groom: 75, spa: 120, puppy: 55 };
+  const sizeMultipliers = { small: 1, medium: 1, large: 1.25, xlarge: 1.5 };
+  const serviceNames = {
+    bath: 'Bath & Brush', groom: 'Full Groom',
+    spa: 'Spa Day', puppy: 'Puppy First Groom'
+  };
+
+  function quizSelect(step, el) {
+    el.parentElement.querySelectorAll('.quiz-option').forEach(o => o.classList.remove('selected'));
+    el.classList.add('selected');
+
+    const val = el.dataset.value;
+    if (step === 1) quizData.pet = val;
+    if (step === 2) quizData.size = val;
+    if (step === 3) quizData.service = val;
+
+    setTimeout(() => {
+      if (step < 3) {
+        document.getElementById('step' + step).classList.remove('active');
+        document.getElementById('step' + (step + 1)).classList.add('active');
+        updateDots(step + 1);
+      } else {
+        showResult();
+      }
+    }, 300);
+  }
+
+  function quizBack(toStep) {
+    document.getElementById('step' + (toStep + 1)).classList.remove('active');
+    document.getElementById('step' + toStep).classList.add('active');
+    updateDots(toStep);
+  }
+
+  function updateDots(current) {
+    for (let i = 1; i <= 3; i++) {
+      const dot = document.getElementById('dot' + i);
+      dot.className = 'quiz-dot';
+      if (i < current) dot.classList.add('done');
+      if (i === current) dot.classList.add('active');
+    }
+  }
+
+  function showResult() {
+    document.getElementById('step3').classList.remove('active');
+    document.querySelectorAll('.quiz-dot').forEach(d => d.classList.add('done'));
+
+    const base = basePrices[quizData.service] || 75;
+    const mult = sizeMultipliers[quizData.size] || 1;
+    const price = Math.round(base * mult);
+
+    document.getElementById('quizPrice').textContent = '$' + price;
+    document.getElementById('quizDesc').textContent =
+      serviceNames[quizData.service] + ' for a ' + quizData.size + ' ' + quizData.pet;
+    document.getElementById('quizResult').classList.add('active');
+  }
+
+  function quizReset() {
+    quizData.pet = ''; quizData.size = ''; quizData.service = '';
+    document.getElementById('quizResult').classList.remove('active');
+    document.querySelectorAll('.quiz-step').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.quiz-option').forEach(o => o.classList.remove('selected'));
+    document.getElementById('step1').classList.add('active');
+    updateDots(1);
+  }
+
+  // ── BOOKING FORM ──
+  const form = document.getElementById('bookingForm');
+  const success = document.getElementById('formSuccess');
+
+  // Set min date to today
+  const today = new Date().toISOString().split('T')[0];
+  document.getElementById('prefDate').setAttribute('min', today);
+
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    form.style.display = 'none';
+    success.style.display = 'block';
+  });
+
+  function resetForm() {
+    form.reset();
+    form.style.display = 'block';
+    success.style.display = 'none';
+  }
+</script>
+</body>
+</html>

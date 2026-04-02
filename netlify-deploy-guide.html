@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Deploy TD Movement — Step-by-Step Guide</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: #0a0a0a;
+    color: #e0e0e0;
+    padding: 2rem;
+    line-height: 1.6;
+  }
+  .guide-header {
+    text-align: center;
+    padding: 2rem 0 3rem;
+    border-bottom: 2px solid #C8F900;
+    margin-bottom: 3rem;
+  }
+  .guide-header h1 {
+    font-size: 2.4rem;
+    color: #C8F900;
+    margin-bottom: 0.5rem;
+    letter-spacing: 2px;
+  }
+  .guide-header p {
+    color: #999;
+    font-size: 1.1rem;
+  }
+  .step {
+    display: flex;
+    gap: 2rem;
+    margin-bottom: 3rem;
+    align-items: flex-start;
+    max-width: 900px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .step-number {
+    flex: 0 0 80px;
+    height: 80px;
+    background: #C8F900;
+    color: #0a0a0a;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    font-weight: 900;
+    flex-shrink: 0;
+  }
+  .step-content {
+    flex: 1;
+  }
+  .step-content h2 {
+    font-size: 1.4rem;
+    color: #fff;
+    margin-bottom: 0.5rem;
+  }
+  .step-content p {
+    color: #bbb;
+    margin-bottom: 1rem;
+  }
+  .visual-box {
+    background: #1a1a1a;
+    border: 1px solid #333;
+    border-radius: 12px;
+    padding: 1.5rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .visual-box.browser {
+    border-top: 28px solid #2a2a2a;
+  }
+  .visual-box.browser::before {
+    content: '● ● ●';
+    position: absolute;
+    top: -22px;
+    left: 12px;
+    color: #555;
+    font-size: 0.7rem;
+    letter-spacing: 4px;
+  }
+  .url-bar {
+    background: #111;
+    border: 1px solid #444;
+    border-radius: 6px;
+    padding: 6px 12px;
+    color: #C8F900;
+    font-family: monospace;
+    font-size: 0.85rem;
+    margin-bottom: 1rem;
+  }
+  .folder-icon {
+    display: inline-block;
+    width: 60px;
+    height: 50px;
+    background: #C8F900;
+    border-radius: 4px 12px 4px 4px;
+    position: relative;
+    margin: 0 auto;
+    vertical-align: middle;
+  }
+  .folder-icon::before {
+    content: '';
+    position: absolute;
+    top: -10px;
+    left: 0;
+    width: 28px;
+    height: 10px;
+    background: #C8F900;
+    border-radius: 4px 4px 0 0;
+  }
+  .folder-icon span {
+    position: absolute;
+    bottom: 6px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 0.55rem;
+    font-weight: 700;
+    color: #0a0a0a;
+    white-space: nowrap;
+  }
+  .drop-zone {
+    border: 3px dashed #C8F900;
+    border-radius: 12px;
+    padding: 2rem;
+    text-align: center;
+    background: rgba(200, 249, 0, 0.03);
+    margin: 1rem 0;
+  }
+  .drop-zone p {
+    color: #C8F900 !important;
+    font-size: 1.1rem;
+    font-weight: 600;
+  }
+  .drop-zone .sub {
+    color: #777 !important;
+    font-size: 0.85rem;
+    font-weight: 400;
+    margin-top: 0.3rem;
+  }
+  .arrow-down {
+    text-align: center;
+    font-size: 2.5rem;
+    color: #C8F900;
+    margin: 0.5rem 0;
+    animation: bounce 1.5s infinite;
+  }
+  @keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(8px); }
+  }
+  .file-tree {
+    font-family: monospace;
+    font-size: 0.9rem;
+    padding: 1rem;
+    background: #111;
+    border-radius: 8px;
+    line-height: 1.8;
+  }
+  .file-tree .folder { color: #C8F900; font-weight: 700; }
+  .file-tree .file { color: #aaa; padding-left: 1.5rem; }
+  .highlight-path {
+    background: rgba(200, 249, 0, 0.15);
+    padding: 8px 14px;
+    border-radius: 6px;
+    border-left: 3px solid #C8F900;
+    font-family: monospace;
+    font-size: 0.85rem;
+    color: #C8F900;
+    margin: 0.5rem 0;
+    word-break: break-all;
+  }
+  .warning-box {
+    background: rgba(255, 180, 0, 0.08);
+    border: 1px solid rgba(255, 180, 0, 0.3);
+    border-left: 3px solid #ffb400;
+    border-radius: 8px;
+    padding: 1rem 1.2rem;
+    margin: 1rem 0;
+  }
+  .warning-box strong {
+    color: #ffb400;
+  }
+  .warning-box p {
+    color: #ccc !important;
+    font-size: 0.9rem;
+  }
+  .success-box {
+    background: rgba(200, 249, 0, 0.06);
+    border: 1px solid rgba(200, 249, 0, 0.25);
+    border-left: 3px solid #C8F900;
+    border-radius: 8px;
+    padding: 1rem 1.2rem;
+    margin: 1rem 0;
+  }
+  .success-box p {
+    color: #C8F900 !important;
+    font-weight: 600;
+  }
+  .netlify-btn {
+    display: inline-block;
+    background: #C8F900;
+    color: #0a0a0a;
+    padding: 10px 24px;
+    border-radius: 6px;
+    font-weight: 700;
+    font-size: 0.95rem;
+    text-decoration: none;
+    margin-top: 0.5rem;
+  }
+  .mock-site {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    background: #111;
+    border-radius: 8px;
+  }
+  .mock-site .dot { width: 12px; height: 12px; border-radius: 50%; background: #C8F900; }
+  .mock-site .line { height: 8px; background: #333; border-radius: 4px; flex: 1; }
+  .mock-site .line.active { background: #C8F900; flex: 0.4; }
+  .connector {
+    text-align: center;
+    padding: 1.5rem 0;
+  }
+  .connector svg { width: 40px; height: 60px; }
+  .step-divider {
+    max-width: 900px;
+    margin: 0 auto 3rem;
+    border: none;
+    border-top: 1px solid #222;
+  }
+  .drag-illustration {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2rem;
+    padding: 1rem;
+  }
+  .cursor-icon {
+    font-size: 1.8rem;
+    animation: drag 2s infinite;
+  }
+  @keyframes drag {
+    0% { transform: translate(0, 0); }
+    30% { transform: translate(0, -5px); }
+    60% { transform: translate(40px, 10px); }
+    100% { transform: translate(0, 0); }
+  }
+</style>
+</head>
+<body>
+
+<div class="guide-header">
+  <h1>DEPLOY TD MOVEMENT TO NETLIFY</h1>
+  <p>Follow these 4 simple steps to get your site live</p>
+</div>
+
+<!-- STEP 1 -->
+<div class="step">
+  <div class="step-number">1</div>
+  <div class="step-content">
+    <h2>Open Your AI Project Folder</h2>
+    <p>Go to your Desktop and open the <strong>AI project folder</strong>. Inside you'll see the <strong>td-movement-site</strong> folder — this is what you'll deploy.</p>
+    <div class="visual-box">
+      <div class="file-tree">
+        <div class="folder">📁 Desktop</div>
+        <div class="file">📁 AI project folder</div>
+        <div class="file" style="padding-left: 3rem; color: #C8F900; font-weight: 700;">📁 td-movement-site  ← THIS FOLDER</div>
+        <div class="file" style="padding-left: 4.5rem;">📄 index.html</div>
+        <div class="file" style="padding-left: 4.5rem;">🖼️ nike_head.png</div>
+      </div>
+    </div>
+    <div class="highlight-path">Desktop → AI project folder → td-movement-site</div>
+  </div>
+</div>
+
+<hr class="step-divider">
+
+<!-- STEP 2 -->
+<div class="step">
+  <div class="step-number">2</div>
+  <div class="step-content">
+    <h2>Open Netlify Drop in Your Browser</h2>
+    <p>Go to the Netlify Drop page. It should already be open — if not, click the link below:</p>
+    <a href="https://app.netlify.com/drop" target="_blank" class="netlify-btn">Open Netlify Drop →</a>
+    <div class="visual-box browser" style="margin-top: 1rem;">
+      <div class="url-bar">https://app.netlify.com/drop</div>
+      <div class="drop-zone">
+        <p>Want to deploy a new site without connecting to Git?</p>
+        <p class="sub">Drag and drop your site output folder here</p>
+        <div style="margin-top: 1rem; padding: 1.5rem; border: 2px dashed #555; border-radius: 8px;">
+          <p style="color: #777 !important; font-size: 0.9rem;">Drop zone area — this is where you'll drag your folder</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<hr class="step-divider">
+
+<!-- STEP 3 -->
+<div class="step">
+  <div class="step-number">3</div>
+  <div class="step-content">
+    <h2>Drag & Drop the Folder</h2>
+    <p>Drag the entire <strong>td-movement-site</strong> folder from your file explorer and drop it onto the Netlify Drop zone in your browser.</p>
+    <div class="visual-box" style="text-align: center;">
+      <div class="drag-illustration">
+        <div style="text-align: center;">
+          <div class="folder-icon"><span>td-movement-site</span></div>
+          <div style="font-size: 0.75rem; color: #999; margin-top: 8px;">Your folder</div>
+        </div>
+        <div class="cursor-icon">🖱️ ➜</div>
+        <div style="flex: 1;">
+          <div class="drop-zone" style="border-color: #C8F900;">
+            <p>Drop here!</p>
+          </div>
+        </div>
+      </div>
+      <div class="arrow-down">⬇</div>
+      <div class="success-box">
+        <p>✅ Deploying your site... Done!</p>
+      </div>
+    </div>
+    <div class="warning-box">
+      <strong>⚠️ Important:</strong>
+      <p>Drag the <strong>folder itself</strong> (td-movement-site), NOT the individual files inside it. Netlify needs the whole folder.</p>
+    </div>
+  </div>
+</div>
+
+<hr class="step-divider">
+
+<!-- STEP 4 -->
+<div class="step">
+  <div class="step-number">4</div>
+  <div class="step-content">
+    <h2>Connect Your Custom Domain</h2>
+    <p>After the deploy finishes, Netlify gives you a random URL (like <code>dapper-tulumba-14656d.netlify.app</code>). To point <strong>tdmovement.com</strong> to this new deploy:</p>
+    <div class="visual-box">
+      <div style="padding: 0.5rem 0;">
+        <p style="margin-bottom: 0.8rem;">1. Click <strong style="color: #C8F900;">"Site settings"</strong> on your new site</p>
+        <p style="margin-bottom: 0.8rem;">2. Go to <strong style="color: #C8F900;">"Domain management"</strong></p>
+        <p style="margin-bottom: 0.8rem;">3. Click <strong style="color: #C8F900;">"Add custom domain"</strong></p>
+        <p style="margin-bottom: 0.8rem;">4. Type: <code style="color: #C8F900;">tdmovement.com</code></p>
+        <p>5. Netlify will ask to move it from your old project — click <strong style="color: #C8F900;">"Yes, move domain"</strong></p>
+      </div>
+    </div>
+    <div class="success-box" style="margin-top: 1rem;">
+      <p>🎉 Your TD Movement site is now live at tdmovement.com!</p>
+    </div>
+    <div class="warning-box">
+      <strong>💡 Alternative:</strong>
+      <p>Instead of a new deploy, you can update your existing tdmovement.com project directly. Go to <strong>app.netlify.com</strong> → click the <strong>tdmovement.com</strong> project → <strong>Deploys</strong> tab → drag your folder into the deploy zone at the bottom of the page. This keeps your domain connected automatically.</p>
+    </div>
+  </div>
+</div>
+
+<div style="text-align: center; padding: 3rem 0; border-top: 2px solid #C8F900; max-width: 900px; margin: 2rem auto 0;">
+  <p style="color: #C8F900; font-size: 1.2rem; font-weight: 700;">THE TD MOVEMENT</p>
+  <p style="color: #666; font-size: 0.85rem; margin-top: 0.5rem;">People. Process. Technology.</p>
+</div>
+
+</body>
+</html>
