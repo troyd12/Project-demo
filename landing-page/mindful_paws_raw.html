@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mindful Paws | Where Grooming Meets Calm</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: Arial, Helvetica, sans-serif; color: #333; line-height: 1.6; }
+
+    nav {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 14px 24px; background: #fff; border-bottom: 1px solid #ddd;
+      position: sticky; top: 0; z-index: 10;
+    }
+    .logo { font-size: 1.3rem; font-weight: bold; color: #2e7d32; }
+    .nav-links { display: flex; gap: 20px; list-style: none; }
+    .nav-links a { text-decoration: none; color: #555; font-size: 0.9rem; }
+    .nav-links a:hover { color: #2e7d32; }
+
+    .hero {
+      text-align: center; padding: 80px 20px;
+      background: #e8f5e9;
+    }
+    .hero h1 { font-size: 2.5rem; color: #1b5e20; margin-bottom: 8px; }
+    .hero p { font-size: 1.1rem; color: #666; margin-bottom: 24px; }
+    .hero-btns { display: flex; gap: 10px; justify-content: center; }
+    .btn {
+      padding: 12px 24px; border-radius: 6px; font-size: 0.95rem;
+      font-weight: bold; text-decoration: none; cursor: pointer; border: none;
+    }
+    .btn-green { background: #2e7d32; color: #fff; }
+    .btn-green:hover { background: #1b5e20; }
+    .btn-outline { background: #fff; color: #2e7d32; border: 2px solid #2e7d32; }
+    .btn-outline:hover { background: #e8f5e9; }
+
+    section { padding: 60px 20px; }
+    .section-heading { text-align: center; font-size: 1.8rem; margin-bottom: 8px; color: #1b5e20; }
+    .section-sub { text-align: center; color: #888; margin-bottom: 32px; }
+
+    /* Quiz */
+    #quiz { background: #f5f5f5; }
+    .quiz-box {
+      max-width: 500px; margin: 0 auto; background: #fff;
+      border-radius: 8px; padding: 32px; box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+    .quiz-step { display: none; }
+    .quiz-step.active { display: block; }
+    .quiz-step h3 { font-size: 1.2rem; margin-bottom: 16px; }
+    .quiz-options { display: flex; flex-wrap: wrap; gap: 10px; }
+    .quiz-option {
+      flex: 1; min-width: 120px; padding: 14px; border: 2px solid #ddd;
+      border-radius: 8px; text-align: center; cursor: pointer; background: #fff;
+    }
+    .quiz-option:hover { border-color: #2e7d32; background: #f1f8e9; }
+    .quiz-option.selected { border-color: #2e7d32; background: #e8f5e9; }
+    .quiz-option .em { font-size: 1.5rem; display: block; margin-bottom: 4px; }
+    .quiz-back { background: none; border: none; color: #999; cursor: pointer; margin-top: 12px; font-size: 0.9rem; }
+    .quiz-back:hover { color: #333; }
+    .quiz-result { text-align: center; }
+    .quiz-result .price { font-size: 2rem; font-weight: bold; color: #2e7d32; margin: 12px 0; }
+    .quiz-result .info { color: #888; margin-bottom: 20px; }
+    .quiz-result-btns { display: flex; gap: 10px; justify-content: center; }
+
+    /* Services */
+    .services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; max-width: 900px; margin: 0 auto; }
+    .svc-card {
+      border: 1px solid #e0e0e0; border-radius: 8px; padding: 24px; text-align: center;
+    }
+    .svc-card:hover { box-shadow: 0 2px 12px rgba(0,0,0,0.06); }
+    .svc-card .icon { font-size: 2rem; margin-bottom: 10px; }
+    .svc-card h3 { font-size: 1.05rem; margin-bottom: 8px; }
+    .svc-card p { font-size: 0.85rem; color: #777; margin-bottom: 12px; }
+    .svc-card .price { font-size: 1.3rem; font-weight: bold; color: #2e7d32; }
+
+    /* Gallery */
+    #gallery { background: #f5f5f5; }
+    .gallery-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; max-width: 700px; margin: 0 auto; }
+    .gal-item {
+      aspect-ratio: 1; background: #ddd; border-radius: 8px;
+      display: flex; align-items: center; justify-content: center; font-size: 2.5rem;
+    }
+
+    /* Booking */
+    .booking-form { max-width: 480px; margin: 0 auto; background: #f9f9f9; padding: 28px; border-radius: 8px; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+    .form-group label { display: block; font-size: 0.85rem; font-weight: bold; margin-bottom: 4px; }
+    .form-group input {
+      width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 0.95rem;
+    }
+    .form-group input:focus { outline: none; border-color: #2e7d32; }
+    .submit-btn {
+      width: 100%; padding: 12px; background: #2e7d32; color: #fff;
+      border: none; border-radius: 6px; font-size: 1rem; font-weight: bold; cursor: pointer; margin-top: 8px;
+    }
+    .submit-btn:hover { background: #1b5e20; }
+    .success { display: none; text-align: center; padding: 32px; }
+    .success h3 { color: #2e7d32; margin-bottom: 8px; }
+
+    footer { text-align: center; padding: 24px; background: #1b5e20; color: rgba(255,255,255,0.7); font-size: 0.85rem; }
+    footer strong { color: #fff; }
+
+    @media (max-width: 600px) {
+      .hero h1 { font-size: 1.8rem; }
+      .form-row { grid-template-columns: 1fr; }
+      .nav-links { display: none; }
+      .gallery-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="logo">🐾 Mindful Paws</div>
+  <ul class="nav-links">
+    <li><a href="#quiz">Price Quiz</a></li>
+    <li><a href="#services">Services</a></li>
+    <li><a href="#gallery">Gallery</a></li>
+    <li><a href="#booking">Book Now</a></li>
+  </ul>
+</nav>
+
+<section class="hero">
+  <h1>Mindful Paws</h1>
+  <p>Where grooming meets calm</p>
+  <div class="hero-btns">
+    <a href="#booking" class="btn btn-green">Book Appointment</a>
+    <a href="#quiz" class="btn btn-outline">Get a Price Estimate</a>
+  </div>
+</section>
+
+<section id="quiz">
+  <h2 class="section-heading">Quick Price Estimate</h2>
+  <p class="section-sub">Answer 3 quick questions for an instant quote</p>
+  <div class="quiz-box">
+    <div class="quiz-step active" id="s1">
+      <h3>1. What type of pet?</h3>
+      <div class="quiz-options">
+        <div class="quiz-option" onclick="pick(1,this,'Dog')"><span class="em">🐕</span>Dog</div>
+        <div class="quiz-option" onclick="pick(1,this,'Cat')"><span class="em">🐈</span>Cat</div>
+        <div class="quiz-option" onclick="pick(1,this,'Rabbit')"><span class="em">🐇</span>Rabbit</div>
+        <div class="quiz-option" onclick="pick(1,this,'Other')"><span class="em">🐾</span>Other</div>
+      </div>
+    </div>
+    <div class="quiz-step" id="s2">
+      <h3>2. What size?</h3>
+      <div class="quiz-options">
+        <div class="quiz-option" onclick="pick(2,this,'Small')"><span class="em">🤏</span>Small</div>
+        <div class="quiz-option" onclick="pick(2,this,'Medium')"><span class="em">🐕</span>Medium</div>
+        <div class="quiz-option" onclick="pick(2,this,'Large')"><span class="em">🦮</span>Large</div>
+      </div>
+      <button class="quiz-back" onclick="go(1)">&larr; Back</button>
+    </div>
+    <div class="quiz-step" id="s3">
+      <h3>3. Which service?</h3>
+      <div class="quiz-options">
+        <div class="quiz-option" onclick="pick(3,this,'Bath & Brush')"><span class="em">🛁</span>Bath & Brush</div>
+        <div class="quiz-option" onclick="pick(3,this,'Full Groom')"><span class="em">✂️</span>Full Groom</div>
+        <div class="quiz-option" onclick="pick(3,this,'Spa Day')"><span class="em">💆</span>Spa Day</div>
+      </div>
+      <button class="quiz-back" onclick="go(2)">&larr; Back</button>
+    </div>
+    <div class="quiz-step" id="sR">
+      <div class="quiz-result">
+        <div style="font-size:2.5rem" id="rE">🐾</div>
+        <h3>Your Estimate</h3>
+        <div class="price" id="rP">$45</div>
+        <p class="info" id="rD">Bath & Brush for a medium dog</p>
+        <div class="quiz-result-btns">
+          <a href="#booking" class="btn btn-green">Book Now</a>
+          <button class="btn btn-outline" onclick="reset()">Start Over</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="services">
+  <h2 class="section-heading">Our Services</h2>
+  <p class="section-sub">Gentle care tailored to your pet's needs</p>
+  <div class="services-grid">
+    <div class="svc-card">
+      <div class="icon">🛁</div>
+      <h3>Bath & Brush</h3>
+      <p>Thorough wash with premium shampoo, blow-dry, and gentle brush-out.</p>
+      <div class="price">$45</div>
+    </div>
+    <div class="svc-card">
+      <div class="icon">✂️</div>
+      <h3>Full Groom</h3>
+      <p>Haircut, nail trim, ear cleaning, and teeth brushing — head to tail.</p>
+      <div class="price">$75</div>
+    </div>
+    <div class="svc-card">
+      <div class="icon">💆</div>
+      <h3>Spa Day</h3>
+      <p>Deep conditioning, blueberry facial, paw balm, and aromatherapy.</p>
+      <div class="price">$120</div>
+    </div>
+    <div class="svc-card">
+      <div class="icon">🐶</div>
+      <h3>Puppy First Groom</h3>
+      <p>Gentle intro for puppies in a low-stress environment with treats.</p>
+      <div class="price">$55</div>
+    </div>
+  </div>
+</section>
+
+<section id="gallery">
+  <h2 class="section-heading">Happy Pets</h2>
+  <p class="section-sub">Some of our favorite clients</p>
+  <div class="gallery-grid">
+    <div class="gal-item">🐕</div>
+    <div class="gal-item">🐈</div>
+    <div class="gal-item">🐩</div>
+    <div class="gal-item">🐕‍🦺</div>
+    <div class="gal-item">🐱</div>
+    <div class="gal-item">🐶</div>
+  </div>
+</section>
+
+<section id="booking">
+  <h2 class="section-heading">Book an Appointment</h2>
+  <p class="section-sub">We'll confirm within 24 hours</p>
+  <div class="booking-form">
+    <form id="bookingForm">
+      <div class="form-row">
+        <div class="form-group">
+          <label>Pet Name</label>
+          <input type="text" placeholder="Buddy" required>
+        </div>
+        <div class="form-group">
+          <label>Owner Name</label>
+          <input type="text" placeholder="Jane Smith" required>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Phone</label>
+          <input type="tel" placeholder="(555) 123-4567" required>
+        </div>
+        <div class="form-group">
+          <label>Preferred Date</label>
+          <input type="date" id="dateField" required>
+        </div>
+      </div>
+      <button type="submit" class="submit-btn">Book Appointment</button>
+    </form>
+    <div class="success" id="success">
+      <div style="font-size:2.5rem">✅</div>
+      <h3>Booking Submitted!</h3>
+      <p>We'll call you within 24 hours to confirm.</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>&copy; 2026 <strong>Mindful Paws</strong>. All rights reserved.</p>
+</footer>
+
+<script>
+  const a = { pet: '', size: '', svc: '' };
+
+  function pick(step, el, val) {
+    el.closest('.quiz-step').querySelectorAll('.quiz-option').forEach(o => o.classList.remove('selected'));
+    el.classList.add('selected');
+    if (step === 1) a.pet = val;
+    if (step === 2) a.size = val;
+    if (step === 3) a.svc = val;
+    setTimeout(() => step < 3 ? go(step + 1) : result(), 250);
+  }
+
+  function go(n) {
+    document.querySelectorAll('.quiz-step').forEach(s => s.classList.remove('active'));
+    document.getElementById('s' + n).classList.add('active');
+  }
+
+  function result() {
+    const prices = { 'Bath & Brush': 45, 'Full Groom': 75, 'Spa Day': 120 };
+    const mult = { Small: 0.85, Medium: 1, Large: 1.25 };
+    const p = Math.round((prices[a.svc] || 45) * (mult[a.size] || 1));
+    const em = { Dog: '🐕', Cat: '🐈', Rabbit: '🐇', Other: '🐾' };
+    document.getElementById('rP').textContent = '$' + p;
+    document.getElementById('rD').textContent = a.svc + ' for a ' + a.size.toLowerCase() + ' ' + a.pet.toLowerCase();
+    document.getElementById('rE').textContent = em[a.pet] || '🐾';
+    document.querySelectorAll('.quiz-step').forEach(s => s.classList.remove('active'));
+    document.getElementById('sR').classList.add('active');
+  }
+
+  function reset() {
+    a.pet = ''; a.size = ''; a.svc = '';
+    document.querySelectorAll('.quiz-option').forEach(o => o.classList.remove('selected'));
+    document.querySelectorAll('.quiz-step').forEach(s => s.classList.remove('active'));
+    document.getElementById('s1').classList.add('active');
+  }
+
+  document.getElementById('dateField').setAttribute('min', new Date().toISOString().split('T')[0]);
+  document.getElementById('bookingForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    this.style.display = 'none';
+    document.getElementById('success').style.display = 'block';
+  });
+</script>
+</body>
+</html>
