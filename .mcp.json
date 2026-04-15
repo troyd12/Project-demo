@@ -1,0 +1,14 @@
+{
+  "mcpServers": {
+    "osint-tools": {
+      "command": "npx",
+      "args": ["-y", "osint-mcp-server"],
+      "env": {}
+    },
+    "youtube": {
+      "command": "npx",
+      "args": ["-y", "@anthropic-ai/mcp-youtube"],
+      "env": {}
+    }
+  }
+}

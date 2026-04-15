@@ -2,10 +2,16 @@
   "version": "0.0.1",
   "configurations": [
     {
-      "name": "static-server",
+      "name": "eddies-preview",
       "runtimeExecutable": "C:\\Users\\User\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
-      "runtimeArgs": ["-m", "http.server", "8000"],
-      "port": 8000
+      "runtimeArgs": ["-m", "http.server", "9090", "-d", "landing-page"],
+      "port": 9090
+    },
+    {
+      "name": "td-movement",
+      "runtimeExecutable": "C:\\Users\\User\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+      "runtimeArgs": ["-m", "http.server", "9091", "-d", "td-movement-site"],
+      "port": 9091
     }
   ]
 }

@@ -2,7 +2,34 @@
   "permissions": {
     "allow": [
       "Bash(find '/c/Users/User/Desktop/AI project folder' -type f \\\\\\(-name *.html -o -name *.js -o -name *.jsx -o -name *.ts -o -name *.tsx -o -name *.py -o -name *.json -o -name *.yml -o -name *.yaml \\\\\\))",
-      "Bash(grep -r \"PORT\\\\|port\\\\|serve\\\\|dev\\\\|start\\\\|localhost\\\\|3000\\\\|8000\\\\|5000\" '/c/Users/User/Desktop/AI project folder' --include=*.json --include=*.js --include=*.py --include=*.ts --include=*.tsx)"
+      "Bash(grep -r \"PORT\\\\|port\\\\|serve\\\\|dev\\\\|start\\\\|localhost\\\\|3000\\\\|8000\\\\|5000\" '/c/Users/User/Desktop/AI project folder' --include=*.json --include=*.js --include=*.py --include=*.ts --include=*.tsx)",
+      "Bash(where gh:*)",
+      "Bash(where curl:*)",
+      "Bash(winget install:*)",
+      "Bash(\"/c/Program Files/GitHub CLI/gh.exe\" --version)",
+      "Bash(\"/c/Program Files \\(x86\\)/GitHub CLI/gh.exe\" --version)",
+      "Read(//c/Program Files/**)",
+      "WebSearch",
+      "Bash(dir \"C:\\\\Users\\\\User\\\\Pictures\")",
+      "Bash(dir \"C:\\\\Users\\\\User\\\\Pictures\\\\profile\")",
+      "Bash(cp \"C:/Users/User/Pictures/Troy Allahme B day.jpg\" \"C:/Users/User/Pictures/profile/Troy Allahme B day.jpg\")",
+      "Bash(cp \"C:/Users/User/Pictures/allahme.jpg\" \"C:/Users/User/Pictures/profile/allahme.jpg\")",
+      "Bash(cp \"C:/Users/User/Pictures/head shot.html\" \"C:/Users/User/Pictures/profile/\")",
+      "Bash(cp \"C:/Users/User/Desktop/Photoshop/Links/profile-461076.jpg\" \"C:/Users/User/Pictures/profile/\")",
+      "mcp__Claude_Preview__preview_start",
+      "Bash(powershell.exe -Command ':*)",
+      "Bash(\"C:\\\\Users\\\\User\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python312\\\\python.exe\" -m pip install reportlab)",
+      "Bash(node automate.js)",
+      "Bash(\"/c/Program Files/nodejs/node.exe\" automate.js)",
+      "Bash(\"/c/Program Files/nodejs/node.exe\" create-logos-v3.js)",
+      "Bash(pip install:*)",
+      "Bash(pip3 install:*)",
+      "Bash(cmd.exe /c \"pip install higgsfield-client\")",
+      "Bash(cmd.exe /c \"where python\")",
+      "Bash(cmd.exe /c \"where pip\")",
+      "Bash(curl -sL \"https://raw.githubusercontent.com/sickn33/antigravity-awesome-skills/main/README.md\")",
+      "Bash(where node:*)",
+      "Bash(curl -sL \"https://raw.githubusercontent.com/sickn33/antigravity-awesome-skills/main/skills/web-design-guidelines/SKILL.md\")"
     ]
   }
 }
